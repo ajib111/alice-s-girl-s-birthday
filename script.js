@@ -2,13 +2,13 @@
 function createStaticLeaves() {
     
     const leafColors = [
-        'radial-gradient(circle, #FFB6C1, #FFC0CB)',
-        'radial-gradient(circle, #FFC0CB, #FFD1DC)',
-        'radial-gradient(circle, #FFE4E6, #FFF0F5)',
-        'radial-gradient(circle, #F8BBD9, #E879F9)',
-        'radial-gradient(circle, #FFCDD2, #EF9A9A)', 
-        'radial-gradient(circle, #F48FB1, #EC407A)', 
-        'radial-gradient(circle, #FFDDE1, #FFCAD4)' 
+        'radial-gradient(circle, #FFF1B5, #E6C96B)',
+        'radial-gradient(circle, #FFE9A6, #D9B84E)',
+        'radial-gradient(circle, #FFFDF2, #FFF3C4)',
+        'radial-gradient(circle, #F7D96C, #C99E32)',
+        'radial-gradient(circle, #FFF4C9, #E8C457)',
+        'radial-gradient(circle, #F2D36B, #BF9327)',
+        'radial-gradient(circle, #FFF8D8, #E6C96B)'
     ];
     
     
@@ -151,10 +151,10 @@ function initializePetals() {
         petal.style.animationDelay = delay + 's';
         
         const colors = [
-            'radial-gradient(circle, #FFB6C1, #FFC0CB)',
-            'radial-gradient(circle, #FFC0CB, #FFD1DC)',
-            'radial-gradient(circle, #FFE4E6, #FFF0F5)',
-            'radial-gradient(circle, #F8BBD9, #E879F9)'
+            'radial-gradient(circle, #FFF1B5, #E6C96B)',
+            'radial-gradient(circle, #FFE9A6, #D9B84E)',
+            'radial-gradient(circle, #FFFDF2, #FFF3C4)',
+            'radial-gradient(circle, #F7D96C, #C99E32)'
         ];
         petal.style.background = colors[Math.floor(Math.random() * colors.length)];
         
@@ -279,10 +279,7 @@ function initializeScrollAnimations() {
 
 function initializeLetterAnimation() {
     const letter = document.getElementById('letter');
-    const letterFullscreen = document.getElementById('letterFullscreen');
-    const closeLetter = document.getElementById('closeLetter');
-    const scribbleLines = document.querySelectorAll('.scribble-line');
-    const fullscreenLetterLines = document.querySelectorAll('#letterFullscreen .letter-line');
+    const letterLines = letter.querySelectorAll('.letter-line');
     let letterVisible = false;
     
     const letterObserver = new IntersectionObserver(function(entries) {
@@ -297,62 +294,26 @@ function initializeLetterAnimation() {
     
     letterObserver.observe(document.getElementById('letterSection'));
     
-    letter.addEventListener('click', function() {
-        letterFullscreen.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        animateFullscreenLetterContent();
-    });
-    
-    if (closeLetter) {
-        closeLetter.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            letterFullscreen.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    }
-    
-    letterFullscreen.addEventListener('click', function(e) {
-        if (e.target === letterFullscreen || e.target.classList.contains('close-letter')) {
-            letterFullscreen.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-    
     function showLetter() {
         letterVisible = true;
-        
-        
         letter.classList.add('visible');
-        animateScribbleContent();
+        animateLetterContent();
     }
     
-    function animateScribbleContent() {
-        scribbleLines.forEach((line) => {
-            const delay = parseInt(line.dataset.delay) || 0;
-            setTimeout(() => {
-                line.classList.add('visible');
-            }, delay);
-        });
-    }
-    
-    function animateFullscreenLetterContent() {
-        fullscreenLetterLines.forEach((line, index) => {
+    function animateLetterContent() {
+        let delay = 400;
+        letterLines.forEach((line) => {
             setTimeout(() => {
                 typeWriterEffect(line);
-            }, index * 100);
+            }, delay);
+            delay += (line.textContent.trim().length * 20) + 220;
         });
     }
     
     function typeWriterEffect(element) {
-        if (element.classList.contains('title')) {
-            element.style.opacity = '1';
-            return;
-        }
-        
         const text = element.textContent;
         element.textContent = '';
-        element.style.opacity = '1';
+        element.classList.add('visible');
         
         let i = 0;
         const timer = setInterval(() => {
@@ -539,7 +500,7 @@ function initializeCakeInteraction() {
     
     // Function to create neon text elements
     function createNeonTexts() {
-        const text = "Permission to eat like a raccoon: granted👍";
+        const text = "Make a wish my Lady";
         const overlay = document.querySelector('.magnify-overlay');
         
         // Neon color options for variety
@@ -671,16 +632,8 @@ function initializeKeyboardShortcuts() {
             document.getElementById('musicToggle').click();
         }
         
-        // Escape key to close letter if open or close magnify overlay
+        // Escape key to close the magnified cake overlay.
         if (event.key === 'Escape') {
-            // Close letter if open
-            const letter = document.getElementById('letter');
-            const envelope = document.getElementById('envelope');
-            if (letter && letter.classList.contains('visible')) {
-                letter.classList.remove('visible');
-                if (envelope) envelope.classList.remove('opened');
-            }
-            
             // Close magnify overlay if open
             const magnifyOverlay = document.querySelector('.magnify-overlay');
             const magnifiedCake = document.querySelector('.magnified-cake');
